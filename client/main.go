@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strings"
 )
 
 func retriveMessage(conn net.Conn) {
@@ -13,7 +14,7 @@ func retriveMessage(conn net.Conn) {
 		message, err := reader.ReadString('\n')
 		if (err!=nil) {
 			fmt.Println("Error reading a message from the server")
-			continue
+			return
 		}
 
 		fmt.Println(message)
@@ -31,14 +32,18 @@ func main() {
 	go retriveMessage(conn)
 
 	reader := bufio.NewReader(os.Stdin)
+	fmt.Println("Conversation started type below: ")
 	for {
-		fmt.Print("Write a message for the group: ")
 		message, err := reader.ReadString('\n')
 		if (err!=nil) {
 			fmt.Println("Error reading the message")
 			continue
 		}
 
-		fmt.Fprintln(conn, message)
+		message = strings.TrimSpace(message)
+
+		if len(message) > 0 {
+			fmt.Fprintln(conn, message)
+		}
 	}
 }
