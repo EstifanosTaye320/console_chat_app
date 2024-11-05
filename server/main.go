@@ -79,8 +79,8 @@ func main() {
 
 		<-c
 		
-		f.Write([]byte(""))
 		f.Close()
+		os.Remove(path)
 		listener.Close()
 		os.Exit(1)
 	}()
